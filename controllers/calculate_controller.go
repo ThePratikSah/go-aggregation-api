@@ -2,13 +2,14 @@ package controllers
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
 	"rest/configs"
 	"rest/models"
 	"rest/responses"
 	"strconv"
 	"time"
+
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
@@ -25,22 +26,22 @@ func Calculate(c *fiber.Ctx) error {
 
 	result, err := timeEntryCollection.Aggregate(ctx, bson.A{
 		bson.D{
-			{"$match",
-				bson.D{
-					{"startDateTime", bson.D{{"$gte", "1567276200000"}}},
-					{"endDateTime", bson.D{{"$lte", "1569868199000"}}},
+			{Key: "$match",
+				Value: bson.D{
+					{Key: "startDateTime", Value: bson.D{{Key: "$gte", Value: "1567276200000"}}},
+					{Key: "endDateTime", Value: bson.D{{Key: "$lte", Value: "1569868199000"}}},
 				},
 			},
 		},
 		bson.D{
-			{"$group",
-				bson.D{
-					{"_id", "$resourceID"},
-					{"totalTime", bson.D{{"$sum", bson.D{{"$toDecimal", "$timeSpent"}}}}},
+			{Key: "$group",
+				Value: bson.D{
+					{Key: "_id", Value: "$resourceID"},
+					{Key: "totalTime", Value: bson.D{{Key: "$sum", Value: bson.D{{Key: "$toDecimal", Value: "$timeSpent"}}}}},
 				},
 			},
 		},
-		bson.D{{"$sort", bson.D{{"_id", 1}}}},
+		bson.D{{Key: "$sort", Value: bson.D{{Key: "_id", Value: 1}}}},
 	})
 
 	if err != nil {
@@ -74,16 +75,16 @@ func CalculateWithoutAgg(c *fiber.Ctx) error {
 	defer cancel()
 
 	opts := options.Find().SetProjection(bson.D{
-		{"_id", 0},
-		{"resourceID", 1},
-		{"timeSpent", 1},
-		{"startDateTime", 1},
-		{"endDateTime", 1},
+		{Key: "_id", Value: 0},
+		{Key: "resourceID", Value: 1},
+		{Key: "timeSpent", Value: 1},
+		{Key: "startDateTime", Value: 1},
+		{Key: "endDateTime", Value: 1},
 	})
 
 	results, err := timeEntryCollection.Find(ctx, bson.D{
-		{"startDateTime", bson.D{{"$gte", "1567276200000"}}},
-		{"endDateTime", bson.D{{"$lte", "1569868199000"}}},
+		{Key: "startDateTime", Value: bson.D{{Key: "$gte", Value: "1567276200000"}}},
+		{Key: "endDateTime", Value: bson.D{{Key: "$lte", Value: "1569868199000"}}},
 	}, opts)
 
 	if err != nil {
