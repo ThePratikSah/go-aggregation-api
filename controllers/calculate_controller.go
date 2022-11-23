@@ -59,14 +59,14 @@ func Calculate(c *fiber.Ctx) error {
 		var singleData models.Data
 
 		if err := result.Decode(&singleData); err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+			return c.Status(http.StatusInternalServerError).JSON(responses.DataResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
 		}
 
 		data = append(data, singleData)
 	}
 
 	return c.Status(http.StatusOK).JSON(
-		responses.UserResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": data}},
+		responses.DataResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": data}},
 	)
 }
 
@@ -100,7 +100,6 @@ func CalculateWithoutAgg(c *fiber.Ctx) error {
 	defer func(results *mongo.Cursor, ctx context.Context) {
 		err := results.Close(ctx)
 		if err != nil {
-
 		}
 	}(results, ctx)
 
@@ -108,7 +107,7 @@ func CalculateWithoutAgg(c *fiber.Ctx) error {
 	for results.Next(ctx) {
 		var singleObject models.NewData
 		if err = results.Decode(&singleObject); err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(responses.UserResponse{
+			return c.Status(http.StatusInternalServerError).JSON(responses.DataResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "error",
 				Data: &fiber.Map{

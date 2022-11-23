@@ -10,11 +10,8 @@ import (
 func main() {
 	app := fiber.New()
 
-	// connect to database
 	configs.ConnectDB()
 
-	// routes middleware
-	routes.UserRouter(app)
 	routes.CalculateRoute(app)
 
 	app.Listen(":80")
