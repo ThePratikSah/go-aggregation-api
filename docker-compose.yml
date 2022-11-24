@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  # db_1:
+  #   image: mongo
+  #   container_name: db_1
+  #   restart: always
+  #   volumes:
+  #     - ./data/db:/data/db
+  #   ports:
+  #     - 27017:27017
+  go_app:
+    build: .
+    container_name: go_app
+    restart: always
+    ports:
+      - 8080:80
+    # depends_on:
+    #   - db_1
+    environment:
+      - MONGOURI=mongodb+srv://doadmin:OZA0uD7Y46fN5213@db-mongodb-blr1-44855-a02501bc.mongo.ondigitalocean.com/admin?tls=true&authSource=admin&replicaSet=db-mongodb-blr1-44855
+      # - MONGOURI_DEV=mongodb://db_1:27017
