@@ -16,7 +16,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var timeEntryCollection = configs.GetCollection(configs.DB, "dev_timeEntries")
+var collection = configs.GetCollectionName()
+var timeEntryCollection = configs.GetCollection(configs.DB, collection)
 
 func Calculate(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
